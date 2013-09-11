@@ -1,0 +1,199 @@
+/** Add css rules here for your application. */
+
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+  font-size: 4em;
+  font-weight: bold;
+  color: white;
+  margin: 40px 0px 70px;
+  text-align: center;
+  border:0px;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  background :  #95B3D7;
+	margin: 5px;
+	border: Black;
+	border-size:2px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+.MainViewTitleLabel {
+ font-size: 20pt;
+}
+.MainViewSubTitleLabel {
+ font-size: 10pt;
+ text-transform: none;
+}
+.titulo_tabela {
+	color: rgb(255, 255, 255);
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	text-align: left;
+	background-color: rgb(55, 96, 145);
+	border-left: 1px solid;
+	border-left-color: black;
+	border-top: 1px solid;
+	border-top-color: black;
+	border-right: 1px solid;
+	border-right-color: black;
+	border-bottom: 1px solid;
+	border-bottom-color: black;
+}
+
+.fundo_tabela_componente {
+  background-color: #e2e2e2;
+  border-left: 1px solid;
+  border-left-color: gray;
+  border-top: 1px solid;
+  border-top-color: gray;
+  border-right: 1px solid;
+  border-right-color: gray;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+    
+}
+
+.fundo_tabela_componente_over {
+  background : 	#B8CCE4;
+  border-left: 1px solid;
+  border-left-color: gray;
+  border-top: 1px solid;
+  border-top-color: gray;
+  border-right: 1px solid;
+  border-right-color: black;
+  border-bottom: 1px solid;
+  border-bottom-color: black;
+  cursor: pointer;  
+
+}
+.fundo_tabela_componente_down {
+  background : 	#B8CCE4;
+  border-left: 1px solid;
+  border-left-color: black;
+  border-top: 1px solid;
+  border-top-color: black;
+  border-right: 1px solid;
+  border-right-color: gray;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+  cursor: pointer;  
+
+}
+
+
+
+.label_comum {
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+}
+.tabela_mainview_titulo {
+	color: rgb(00, 00, 00);
+	border: 1px solid Navy;
+	font-size: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	text-align: left;
+	text-transform: none;
+	background-color: rgb(184,204,228);
+}
+
+
+
+.rodape {
+	border: 1px solid Navy;
+	font-size: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	text-align: center;
+	text-transform: none;
+	background-color: rgb(55,96,145);
+	color: rgb(255, 255, 255);
+}
+.label_rodape {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+}
+.design_text_boxes {
+
+  background-color: #ffffff;
+  border-left: 1px solid;
+  border-left-color: gray;
+  border-top: 1px solid;
+  border-top-color: gray;
+  border-right: 1px solid;
+  border-right-color: gray;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+    
+}
+
+
+.a a:link {
+    color: #ffffff;
+    text-decoration: none;
+}
+.a a:visited {
+    text-decoration: underline;
+    color: #ffffff;
+}
+.a a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+.menu_botoes {
+  background : 	gray;
+}
+.fundo_tabela_cadastro {
+  background-color: darkGray;
+  border-left: 1px solid;
+  border-left-color: gray;
+  border-top: 1px solid;
+  border-top-color: gray;
+  border-right: 1px solid;
+  border-right-color: gray;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+    
+}
+.text_tabela_cadastro {
+  font-size: 1em;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  border:0px;
+  }
+  
+  .curso_16_16_icon {  
+    background-image: url( images/curso.png ) !important;  
+}
+
+  .disciplina_16_16_icon {  
+    background-image: url( images/disciplina.png ) !important;  
+}
+
+  .periodo_16_16_icon {  
+    background-image: url( images/my_projects_folder_16.png ) !important;  
+}
+
