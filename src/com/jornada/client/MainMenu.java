@@ -123,7 +123,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		
 		image_2.setVisible(isVisible);
 		link2.setVisible(isVisible);
-		lblNewLabel_2.setVisible(isVisible);		
+		//lblNewLabel_2.setVisible(isVisible);		
 		
 	}		
 
