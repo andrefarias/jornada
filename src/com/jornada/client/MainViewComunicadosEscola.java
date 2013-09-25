@@ -1,7 +1,6 @@
 package com.jornada.client;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.jornada.shared.NewFlexTable;
 
 public class MainViewComunicadosEscola extends Composite {
 	

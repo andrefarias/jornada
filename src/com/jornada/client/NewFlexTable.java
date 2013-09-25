@@ -1,4 +1,4 @@
-package com.jornada.shared;
+package com.jornada.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

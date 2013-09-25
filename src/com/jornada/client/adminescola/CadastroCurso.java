@@ -1,5 +1,8 @@
 package com.jornada.client.adminescola;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -15,10 +18,15 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.jornada.client.classes.FadeAnimation;
 import com.jornada.client.classes.WorldXmlDS;
+import com.jornada.client.service.GWTServiceCurso;
+import com.jornada.client.service.GWTServiceCursoAsync;
+import com.jornada.shared.classes.Curso;
 import com.smartgwt.client.types.AnimationEffect;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
+import com.smartgwt.client.widgets.RichTextEditor;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -28,10 +36,18 @@ import com.gwtext.client.widgets.Panel;
 
 public class CadastroCurso extends Composite {
 	
+	
+	TextBox textBoxNome;
+	TextBox textBoxDescricao;
+	RichTextArea richTextEmenta;
 	public ListGrid countryGrid;
+	AsyncCallback callback;
+	Curso curso;
+	DynamicForm dateFormInicial;
 	
 	
 	public CadastroCurso(){
+		
 		
 		
         Panel iconPanel = new Panel();  
@@ -61,6 +77,7 @@ public class CadastroCurso extends Composite {
         cssButtonAdicionar.setShowDisabled(true);
         cssButtonAdicionar.setShowDown(true);
         cssButtonAdicionar.setIcon("../images/plus-circle.png");
+        cssButtonAdicionar.addClickHandler(new ClickHanderAdicionarCurso());
         
         Button cssButtonRemover = new Button("Remover Curso");
         cssButtonRemover.setWidth("150px");
@@ -96,31 +113,31 @@ public class CadastroCurso extends Composite {
 		//grid.setSize("493px", "3cm");
 		//grid.setSize("100%", "100%");
 		
-		Label label = new Label("Nome : ");
-		label.setHeight("25px");
-		grid.setWidget(0, 0, label);
+		Label labelNome = new Label("Nome : ");
+		labelNome.setHeight("25px");
+		grid.setWidget(0, 0, labelNome);
 		
-		TextBox textBox = new TextBox();
-		textBox.setStyleName("design_text_boxes");
-		grid.setWidget(0, 2, textBox);
+		textBoxNome = new TextBox();
+		textBoxNome.setStyleName("design_text_boxes");
+		grid.setWidget(0, 2, textBoxNome);
 		//textBox.setWidth("250px");
 		
-		Label label_1 = new Label("Descri\u00E7\u00E3o :");
-		label_1.setHeight("25px");
-		grid.setWidget(1, 0, label_1);
+		Label labelDescricao = new Label("Descri\u00E7\u00E3o :");
+		labelDescricao.setHeight("25px");
+		grid.setWidget(1, 0, labelDescricao);
 		
-		TextBox textBox_1 = new TextBox();
-		textBox_1.setStyleName("design_text_boxes");
-		grid.setWidget(1, 2, textBox_1);
+		textBoxDescricao = new TextBox();
+		textBoxDescricao.setStyleName("design_text_boxes");
+		grid.setWidget(1, 2, textBoxDescricao);
 		//textBox_1.setWidth("250px");
 		
 		Label label_2 = new Label("Ementa : ");
 		label_2.setHeight("25px");
 		grid.setWidget(2, 0, label_2);
 		
-		RichTextArea richTextArea = new RichTextArea();
-		richTextArea.setStyleName("design_text_boxes");
-		grid.setWidget(2, 2, richTextArea);
+		richTextEmenta = new RichTextArea();
+		richTextEmenta.setStyleName("design_text_boxes");
+		grid.setWidget(2, 2, richTextEmenta);
 		//richTextArea.setWidth("330px");
 		
 		
@@ -128,13 +145,13 @@ public class CadastroCurso extends Composite {
 		label_3.setHeight("25px");
 		grid.setWidget(3, 0, label_3);
 		
-        DateItem dateItem = new DateItem();  
-        dateItem.setTitle("");  
-        dateItem.setHint("<nobr>Picklist based date input</nobr>");
-        DynamicForm dateForm = new DynamicForm(); 
-        dateForm.setItems(dateItem);
+        DateItem dateItemInicial = new DateItem("dateItemInicial");  
+        dateItemInicial.setTitle("");  
+        dateItemInicial.setHint("<nobr>Picklist based date input</nobr>");
+        dateFormInicial = new DynamicForm(); 
+        dateFormInicial.setItems(dateItemInicial);
 
-        grid.setWidget(3, 2, dateForm);
+        grid.setWidget(3, 2, dateFormInicial);
         
 		Label label_4 = new Label("Data Final : ");
 		label_4.setHeight("25px");
@@ -190,6 +207,57 @@ public class CadastroCurso extends Composite {
        
         
         initWidget(iconPanel);
+        
+        
+        
+        // Create an asynchronous callback to handle the result.
+         callback = new AsyncCallback()
+        {
+            
+            public void onFailure(Throwable caught)
+            {
+                //lblServerReply.setText("Communication failed");
+            	System.err.println("Communication failed");
+            }
+
+			@Override
+			public void onSuccess(Object result) {
+				// TODO Auto-generated method stub
+				
+			}
+        };	
+        
+        
+		
+	}
+	
+	
+	
+	
+    public static GWTServiceCursoAsync getService()
+    {
+        // Create the client proxy. Note that although you are creating the
+        // service interface proper, you cast the result to the asynchronous
+        // version of the interface. The cast is always safe because the
+        // generated proxy implements the asynchronous interface automatically.
+
+        return GWT.create(GWTServiceCurso.class);
+    }	
+	
+	private class ClickHanderAdicionarCurso implements ClickHandler{
+
+		@Override
+		public void onClick(com.smartgwt.client.widgets.events.ClickEvent event) {
+			curso = new Curso();
+			curso.setNome(textBoxNome.getText());
+			curso.setDescricao(textBoxDescricao.getText());
+			curso.setEmenta(richTextEmenta.getText());
+			
+			DateItem dateItemInicial = (DateItem)dateFormInicial.getItem("dateItemInicial"); 
+			System.out.println("DateInicial:"+dateItemInicial.getValueAsDate());
+			getService().AdicionarCurso(curso, callback);
+			
+		}
 		
 	}
 

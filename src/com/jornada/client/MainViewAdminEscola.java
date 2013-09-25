@@ -39,13 +39,8 @@ public class MainViewAdminEscola extends Composite {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			//mainView.openAdminEscola();
-			History.newItem("Admin");
-//		    String initToken = History.getToken();
-//		    if (initToken.length() == 0) {
-//		      History.newItem("Admin");
-//		    }
 
+			History.newItem("Admin");
 			
 		}
 		

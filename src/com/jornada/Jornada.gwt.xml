@@ -18,7 +18,7 @@
   <inherits name="com.smartgwt.SmartGwt"/>
   <inherits name="com.smartgwt.SmartGwt"/>
   <inherits name="com.gwtext.GwtExt"/>
-  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+    <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
@@ -29,7 +29,7 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
-  <source path='shared'/>
+  <source path='shared'/>  
   <stylesheet src="js/ext/resources/css/ext-all.css"/>
   <script src="js/ext/adapter/ext/ext-base.js"/>
   <script src="js/ext/ext-all.js"/>

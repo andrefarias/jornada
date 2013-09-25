@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.jornada.shared.NewFlexTable;
 
 public class MainViewComponent extends Composite {
 	
