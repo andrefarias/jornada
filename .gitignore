@@ -3,7 +3,6 @@
 #################
 
 *.pydevproject
-.project
 .metadata
 bin/
 tmp/
@@ -213,3 +212,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+gwt-unitCache
+*.class
+*.rpc

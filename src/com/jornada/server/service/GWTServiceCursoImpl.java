@@ -17,63 +17,68 @@ package com.jornada.server.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
-import com.jornada.client.Jornada;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.database.JornadaDataBase;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServiceCurso {
+public class GWTServiceCursoImpl extends RemoteServiceServlet implements
+		GWTServiceCurso {
 
 	@Override
-	public boolean AdicionarCurso(Curso curso) {
-		// TODO Auto-generated method stub		
+	public Boolean AdicionarCurso(Curso curso) {
+		// TODO Auto-generated method stub
 
 		boolean isOperationDone = false;
-		
+
 		JornadaDataBase dataBase = new JornadaDataBase();
-		
-		try
-		{			
+
+		try {
 			dataBase.open();
 			Connection connection = dataBase.getConnection();
-			
-			PreparedStatement updateCurso = connection.prepareStatement(Curso.DB_UPDATE_CURSO);
-            int count = 0;
-            updateCurso.setString(++count, curso.getNome());
-            updateCurso.setString(++count, curso.getDescricao());
-            updateCurso.setString(++count, curso.getEmenta());		
-            updateCurso.setInt(++count, curso.getIdCurso());
-            
-            int numberUpdate = updateCurso.executeUpdate();  
-            
-            if (numberUpdate == 0)
-            {
-            	count=0;
-            	PreparedStatement insertCurso = connection.prepareStatement(Curso.DB_INSERT_CURSO);
-                insertCurso.setString(++count, curso.getNome());
-                insertCurso.setString(++count, curso.getDescricao());
-                insertCurso.setString(++count, curso.getEmenta());		            	
-                numberUpdate = insertCurso.executeUpdate();
-            }	
-					
-			
-			if(numberUpdate==1){
-				isOperationDone=true;
+
+			PreparedStatement updateCurso = connection
+					.prepareStatement(Curso.DB_UPDATE_CURSO);
+			int count = 0;
+			updateCurso.setString(++count, curso.getNome());
+			updateCurso.setString(++count, curso.getDescricao());
+			updateCurso.setString(++count, curso.getEmenta());
+			updateCurso.setInt(++count, curso.getIdCurso());
+			updateCurso.setTimestamp(++count, new Timestamp(curso.getDtInicio()
+					.getTime()));
+			updateCurso.setTimestamp(++count, new Timestamp(curso.getDtFim()
+					.getTime()));
+
+			int numberUpdate = updateCurso.executeUpdate();
+
+			if (numberUpdate == 0) {
+				count = 0;
+				PreparedStatement insertCurso = connection
+						.prepareStatement(Curso.DB_INSERT_CURSO);
+				insertCurso.setString(++count, curso.getNome());
+				insertCurso.setString(++count, curso.getDescricao());
+				insertCurso.setString(++count, curso.getEmenta());
+				insertCurso.setTimestamp(++count, new Timestamp(curso
+						.getDtInicio().getTime()));
+				insertCurso.setTimestamp(++count, new Timestamp(curso
+						.getDtFim().getTime()));
+
+				numberUpdate = insertCurso.executeUpdate();
 			}
-			
-		}catch (SQLException sqlex){
+
+			if (numberUpdate == 1) {
+				isOperationDone = true;
+			}
+
+		} catch (SQLException sqlex) {
 			System.err.println(sqlex.getMessage());
+		} finally {
+			dataBase.close();
 		}
-		finally{
-			dataBase.close();		
-		}
-		
-		
-		
+
 		return isOperationDone;
 	}
-
 
 }

@@ -23,7 +23,7 @@ import com.jornada.shared.classes.Curso;
 public interface GWTServiceCurso extends RemoteService {
 	
 	
-	public boolean AdicionarCurso(Curso curso);
+	public Boolean AdicionarCurso(Curso curso);
 	
 	
 	

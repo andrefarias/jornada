@@ -5,6 +5,6 @@ import com.jornada.shared.classes.Curso;
 
 public interface GWTServiceCursoAsync {
 
-	public void AdicionarCurso(Curso curso, AsyncCallback callback);
+	public void AdicionarCurso(Curso curso, AsyncCallback<Boolean> callback);
 
 }
