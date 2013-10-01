@@ -16,58 +16,15 @@ public class Curso implements Serializable {
 	private Date dtInicio;
 	private Date dtFim;
 
-	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, data_inicial, data_final) VALUES (?,?,?,?,?)";
-	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, data_inicial=?, data_final=? where id_curso=?";
+//	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, data_inicial, data_final) VALUES (?,?,?,?,?)";
+//	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, data_inicial=?, data_final=? where id_curso=?";
+	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa) VALUES (?,?,?)";
+	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=? where id_curso=?";	
+	public static String DB_SELECT_CURSO = "SELECT * FROM curso";
 
 	public Curso() {
-
 	}
-
-	public boolean AdicionarCurso(Curso curso) {
-		boolean isOperationDone = false;
-		// JornadaDataBase dataBase = new JornadaDataBase();
-		//
-		// try
-		// {
-		// dataBase.open();
-		// Connection connection = dataBase.getConnection();
-		//
-		// PreparedStatement updateCurso =
-		// connection.prepareStatement(DB_UPDATE_CURSO);
-		// int count = 0;
-		// updateCurso.setString(++count, curso.getNome());
-		// updateCurso.setString(++count, curso.getDescricao());
-		// updateCurso.setString(++count, curso.getEmenta());
-		// updateCurso.setInt(++count, curso.getIdCurso());
-		//
-		// int numberUpdate = updateCurso.executeUpdate();
-		//
-		// if (numberUpdate == 0)
-		// {
-		// count=0;
-		// PreparedStatement insertCurso =
-		// connection.prepareStatement(DB_INSERT_CURSO);
-		// insertCurso.setString(++count, curso.getNome());
-		// insertCurso.setString(++count, curso.getDescricao());
-		// insertCurso.setString(++count, curso.getEmenta());
-		// numberUpdate = updateCurso.executeUpdate();
-		// }
-		//
-		//
-		// if(numberUpdate==1){
-		// isOperationDone=true;
-		// }
-		//
-		// }catch (SQLException sqlex){
-		// System.err.println(sqlex.getMessage());
-		// }
-		// finally{
-		// dataBase.close();
-		// }
-
-		return isOperationDone;
-	}
-
+	
 	public int getIdCurso() {
 		return idCurso;
 	}
@@ -100,20 +57,20 @@ public class Curso implements Serializable {
 		this.ementa = ementa;
 	}
 
-	public Date getDtInicio() {
-		return dtInicio;
-	}
-
-	public void setDtInicio(Date dtInicio) {
-		this.dtInicio = dtInicio;
-	}
-
-	public Date getDtFim() {
-		return dtFim;
-	}
-
-	public void setDtFim(Date dtFim) {
-		this.dtFim = dtFim;
-	}
+//	public Date getDtInicio() {
+//		return dtInicio;
+//	}
+//
+//	public void setDtInicio(Date dtInicio) {
+//		this.dtInicio = dtInicio;
+//	}
+//
+//	public Date getDtFim() {
+//		return dtFim;
+//	}
+//
+//	public void setDtFim(Date dtFim) {
+//		this.dtFim = dtFim;
+//	}
 
 }

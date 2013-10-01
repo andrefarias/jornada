@@ -16,9 +16,13 @@ package com.jornada.server.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.sql.Timestamp;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.classes.Curso;
@@ -28,7 +32,11 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements
 		GWTServiceCurso {
 
 	@Override
-	public Boolean AdicionarCurso(Curso curso) {
+
+	public boolean AdicionarCurso(Curso curso) {
+
+
+
 		// TODO Auto-generated method stub
 
 		boolean isOperationDone = false;
@@ -39,31 +47,26 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements
 			dataBase.open();
 			Connection connection = dataBase.getConnection();
 
-			PreparedStatement updateCurso = connection
-					.prepareStatement(Curso.DB_UPDATE_CURSO);
+			PreparedStatement updateCurso = connection.prepareStatement(Curso.DB_UPDATE_CURSO);
 			int count = 0;
 			updateCurso.setString(++count, curso.getNome());
 			updateCurso.setString(++count, curso.getDescricao());
 			updateCurso.setString(++count, curso.getEmenta());
 			updateCurso.setInt(++count, curso.getIdCurso());
-			updateCurso.setTimestamp(++count, new Timestamp(curso.getDtInicio()
-					.getTime()));
-			updateCurso.setTimestamp(++count, new Timestamp(curso.getDtFim()
-					.getTime()));
+			//updateCurso.setTimestamp(++count, new Timestamp(curso.getDtInicio().getTime()));
+			//updateCurso.setTimestamp(++count, new Timestamp(curso.getDtFim().getTime()));
+
 
 			int numberUpdate = updateCurso.executeUpdate();
 
 			if (numberUpdate == 0) {
 				count = 0;
-				PreparedStatement insertCurso = connection
-						.prepareStatement(Curso.DB_INSERT_CURSO);
+				PreparedStatement insertCurso = connection.prepareStatement(Curso.DB_INSERT_CURSO);
 				insertCurso.setString(++count, curso.getNome());
 				insertCurso.setString(++count, curso.getDescricao());
 				insertCurso.setString(++count, curso.getEmenta());
-				insertCurso.setTimestamp(++count, new Timestamp(curso
-						.getDtInicio().getTime()));
-				insertCurso.setTimestamp(++count, new Timestamp(curso
-						.getDtFim().getTime()));
+				//insertCurso.setTimestamp(++count, new Timestamp(curso.getDtInicio().getTime()));
+				//insertCurso.setTimestamp(++count, new Timestamp(curso.getDtFim().getTime()));				
 
 				numberUpdate = insertCurso.executeUpdate();
 			}
@@ -72,13 +75,58 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements
 				isOperationDone = true;
 			}
 
+
 		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
+			isOperationDone=false;
+			System.err.println(sqlex.getMessage());			
 		} finally {
 			dataBase.close();
 		}
 
 		return isOperationDone;
 	}
+
+
+	public List<Curso> getCursos() {
+
+		List<Curso> data = new ArrayList<Curso>();
+		JornadaDataBase dataBase = new JornadaDataBase();
+
+		try 
+		{
+
+			dataBase.open();
+			
+			Connection connection = dataBase.getConnection();
+
+			PreparedStatement psCurso = connection.prepareStatement(Curso.DB_SELECT_CURSO);
+
+			ResultSet rs = psCurso.executeQuery();
+			while (rs.next()) 
+			{
+
+				Curso currentCurso = new Curso();
+				
+				currentCurso.setIdCurso(rs.getInt("id_curso"));
+				currentCurso.setNome(rs.getString("nome_curso"));
+				currentCurso.setDescricao(rs.getString("descricao"));
+				currentCurso.setEmenta(rs.getString("ementa"));
+//				currentCurso.put("data_inicial", rs.getDate("data_inicial"));
+//				currentCurso.put("data_final", rs.getDate("data_final"));
+//				currentCurso.put("id_departamento", rs.getDate("id_departamento"));
+
+				data.add(currentCurso);
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+			dataBase.close();
+		}
+
+		return data;
+
+	}
+
 
 }

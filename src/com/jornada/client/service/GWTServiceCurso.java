@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.jornada.client.service;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -23,9 +25,9 @@ import com.jornada.shared.classes.Curso;
 public interface GWTServiceCurso extends RemoteService {
 	
 	
-	public Boolean AdicionarCurso(Curso curso);
+	public boolean AdicionarCurso(Curso curso);
 	
-	
+	public List<Curso> getCursos();
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

@@ -1,5 +1,7 @@
 package com.jornada.client;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
@@ -7,6 +9,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.widget.client.TextButton;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -23,7 +26,7 @@ import com.jornada.client.adminescola.ViewAdminEscola;
 import com.jornada.client.adminescola.ViewAdminEscola2;
 import com.jornada.client.classes.ElementFader;
 
-public class MainView extends Composite {
+public class MainView extends Composite implements ValueChangeHandler{
 	
 	private MainTitle mainTitle =  new MainTitle();
 	private MainMenu mainMenu;
@@ -39,7 +42,7 @@ public class MainView extends Composite {
 
 
 	public MainView() {	
-		
+				
 		mainMenu = new MainMenu(this);
 		mainBody = new MainBody(this);		
 	
@@ -75,6 +78,7 @@ public class MainView extends Composite {
 	
 	
 	public void openMainView(){
+		History.newItem("Principal");
 		this.vPanelBody.clear();
 		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
@@ -85,6 +89,8 @@ public class MainView extends Composite {
 	}	
 	
 	public void openAdminEscola(){
+		
+		History.newItem("Admin");
 		this.vPanelBody.clear();
 		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1500);
 		
@@ -102,6 +108,8 @@ public class MainView extends Composite {
 	}
 	
 	public void openCadastroCurso(){
+		
+		History.newItem("Curso");
 		
 		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);
 		
@@ -121,6 +129,8 @@ public class MainView extends Composite {
 	}	
 		
 	public void openCadastroDisciplina(){
+		
+		History.newItem("Disciplina");
 		
 		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);
 		//new ElementFader().fade(vPanelMenu.getElement(), 0, 1, 1500);	
@@ -152,6 +162,13 @@ public class MainView extends Composite {
 	
 	public MainMenu getMainMenu() {
 		return mainMenu;
+	}
+
+
+	@Override
+	public void onValueChange(ValueChangeEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

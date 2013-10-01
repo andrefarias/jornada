@@ -197,3 +197,11 @@ h1 {
     background-image: url( images/my_projects_folder_16.png ) !important;  
 }
 
+.label_loading {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	color: red;
+}
+
+

@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.widgets.Img;
@@ -55,7 +56,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		
 	    HorizontalPanel hPanel = new HorizontalPanel();
 	    hPanel.setStyleName("titulo_tabela");
-	    hPanel.setSize("50%", "20px");
+	    //hPanel.setSize("50%", "20px");
 
 	    
 	    hPanel.add(image);	
@@ -68,10 +69,12 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 	    hPanel.add(link2);
 	    
 	    VerticalPanel vPanel = new VerticalPanel();
-	    VerticalPanel vPanelBlank = new VerticalPanel();
-	    vPanelBlank.setSize("10px", "10px");
-	    vPanel.add(vPanelBlank);
+	    //VerticalPanel vPanelBlank = new VerticalPanel();
+	    //vPanelBlank.setSize("10px", "10px");
+	    //vPanel.add(vPanelBlank);
+		vPanel.add(new InlineHTML("&nbsp"));
 	    vPanel.add(hPanel);
+	    vPanel.add(new InlineHTML("&nbsp"));
 		
 		initWidget(vPanel);
 		
