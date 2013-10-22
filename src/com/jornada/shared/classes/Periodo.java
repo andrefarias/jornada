@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Periodo implements Serializable {
 
+	private int idPeriodo;
 	private int idCurso;
 	private String nomeModulo;
 	private String descricao;
@@ -12,10 +13,17 @@ public class Periodo implements Serializable {
 	
 	public static String DB_INSERT_PERIODO = "INSERT INTO periodo (nome_modulo, descricao, numeracao, objetivo, id_curso) VALUES (?,?,?,?,?)";
 	public static String DB_UPDATE_PERIODO = "UPDATE periodo set nome_modulo=?, descricao=?, numeracao=?, objetivo=? where id_curso=?";
+	public static String DB_GET_PERIODO_LISTA = "SELECT * FROM periodo";
 	
 	public Periodo()
 	{}
-	
+
+	public int getIdPeriodo() {
+		return idPeriodo;
+	}
+	public void setIdPeriodo(int idPeriodo) {
+		this.idPeriodo = idPeriodo;
+	}
 	public int getIdCurso() {
 		return idCurso;
 	}

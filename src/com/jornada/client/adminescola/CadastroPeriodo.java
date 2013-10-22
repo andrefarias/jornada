@@ -1,5 +1,7 @@
 package com.jornada.client.adminescola;
 
+import java.util.List;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -12,85 +14,61 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwtext.client.data.SimpleStore;
 import com.gwtext.client.data.Store;
+import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.form.ComboBox;
+import com.jornada.client.MainView;
 import com.jornada.client.classes.WorldXmlDS;
+import com.jornada.client.service.GWTServiceCurso;
+import com.jornada.client.service.GWTServiceCursoAsync;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.client.service.GWTServicePeriodoAsync;
+import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Periodo;
+import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.ImgButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
+import com.smartgwt.client.widgets.layout.HLayout;
 
 public class CadastroPeriodo extends Composite {
 
-	private class AdicionarPeriodoClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			GWTServicePeriodoAsync service = GWT
-					.create(GWTServicePeriodo.class);
-			
-			Periodo periodo = new Periodo();
-			
-			periodo.setIdCurso(Integer.parseInt(cbCurso.getValue()));
-			periodo.setNomeModulo(txtNome.getText());
-			periodo.setDescricao(txtDescricao.getText());
-			periodo.setNumeracao(txtNumeracao.getText());
-			periodo.setObjetivo(rtaObjetivo.getText());
-			
-			service.AdicionarPeriodo(periodo, new AsyncCallback<Boolean>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void onSuccess(Boolean result) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-			});
-
-		}
-
-	}
+	private static GWTServicePeriodoAsync periodoService = null;
 
 	ComboBox cbCurso;
 	TextBox txtNome;
 	TextBox txtDescricao;
 	TextBox txtNumeracao;
 	RichTextArea rtaObjetivo;
-	public ListGrid countryGrid;
+	public ListGrid periodoGrid;
+	private ListGridRecord rollOverRecord;
+	private HLayout rollOverCanvas;
 
-	// countries store
-	Object[][] countries = new Object[][] {
-			new Object[] { 1, "1 Ano - Ensino Fundamental" },
-			new Object[] { 2, "2 Ano - Ensino Fundamental" },
-			new Object[] { 3, "3 Ano - Ensino Fundamental" },
-			new Object[] { 4, "4 Ano - Ensino Fundamental" }, };
+	// cursos store
+	Object[][] cursos = null;
+	private Store cursosStore;
+
+	public static GWTServicePeriodoAsync getPeriodoService() {
+		if (periodoService == null) {
+			periodoService = GWT.create(GWTServicePeriodo.class);
+		}
+		return periodoService;
+	}
 
 	public CadastroPeriodo() {
-
-		final Store countriesStore = new SimpleStore(new String[] { "cid",
-				"country" }, countries);
-		countriesStore.load();
-
+		
 		Panel iconPanel = new Panel();
 		iconPanel.setTitle("Periodo");
 		iconPanel.setIconCls("periodo_16_16_icon");
 		iconPanel.setWidth(800);
 		iconPanel.setHeight(485);
 		iconPanel.setCollapsible(true);
-		// iconPanel.setHtml(getShortBogusMarkup());
 		iconPanel.setShadow(true);
 		iconPanel.setPaddings(0);
 
@@ -119,7 +97,6 @@ public class CadastroPeriodo extends Composite {
 		cssButtonRemover.setIcon("../images/delete.png");
 
 		VerticalPanel verticalPanelTitle = new VerticalPanel();
-		// verticalPanelTitle.setSize("10px", "10px");
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(cssButton);
 		hPanel.add(cssButtonAdicionar);
@@ -131,7 +108,6 @@ public class CadastroPeriodo extends Composite {
 		verticalPanelFooter.setSize("10px", "10px");
 
 		VerticalPanel verticalPanelBody = new VerticalPanel();
-		// verticalPanelBody.setStyleName("fundo_tabela_componente");
 
 		verticalPanelBody.setSize("400px", "400px");
 
@@ -146,14 +122,12 @@ public class CadastroPeriodo extends Composite {
 		grid.setWidget(cv, 0, labelCurso);
 
 		cbCurso = new ComboBox();
-		cbCurso.setFieldLabel("Select Country");
-		cbCurso.setStore(countriesStore);
-		cbCurso.setDisplayField("country");
+		cbCurso.setFieldLabel("Selecione um curso");
+		cbCurso.setDisplayField("curso");
 		cbCurso.setMode(ComboBox.LOCAL);
-		cbCurso.setTriggerAction(ComboBox.ALL);
 		cbCurso.setForceSelection(true);
 		cbCurso.setValueField("cid");
-		cbCurso.setReadOnly(true);
+		popularCursos();
 
 		grid.setWidget(cv, 2, cbCurso);
 
@@ -202,27 +176,74 @@ public class CadastroPeriodo extends Composite {
 		grid.getCellFormatter().setHorizontalAlignment(3, 2,
 				HasHorizontalAlignment.ALIGN_LEFT);
 
-		countryGrid = new ListGrid();
-		countryGrid.setWidth(800);
-		countryGrid.setHeight(150);
-		// countryGrid.setShowFilterEditor(true);
-		// countryGrid.setFilterOnKeypress(true);
-		countryGrid.setDataSource(WorldXmlDS.getInstance());
-		countryGrid.setAutoFetchData(true);
+		Canvas canvas = new Canvas();
 
-		// ListGridField countryCodeField = new ListGridField("countryCode",
-		// "Code", 50);
-		ListGridField nameField = new ListGridField("courseName", "Nome");
-		ListGridField capitalField = new ListGridField("descricao", "Descricao");
-		ListGridField continentField = new ListGridField("ementa", "Ementa");
-		ListGridField dataInicialField = new ListGridField("dataInicial",
-				"Data Inicial");
-		ListGridField dataFinalField = new ListGridField("dataFinal",
-				"Data Final");
-		countryGrid.setFields(nameField, capitalField, continentField,
-				dataInicialField, dataFinalField);
+		periodoGrid = new ListGrid() {
+			@Override
+			protected Canvas getRollOverCanvas(Integer rowNum, Integer colNum) {
+				rollOverRecord = this.getRecord(rowNum);
 
-		verticalPanelBody.add(countryGrid);
+				if (rollOverCanvas == null) {
+					rollOverCanvas = new HLayout(3);
+					rollOverCanvas.setSnapTo("TR");
+					rollOverCanvas.setWidth(50);
+					rollOverCanvas.setHeight(22);
+
+					ImgButton editImg = new ImgButton();
+					editImg.setShowDown(false);
+					editImg.setShowRollOver(false);
+					editImg.setLayoutAlign(Alignment.CENTER);
+					editImg.setSrc("../images/comment_edit.png");
+					editImg.setPrompt("Edit Comments");
+					editImg.setHeight(16);
+					editImg.setWidth(16);
+					editImg.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							SC.say("Edit Comment Icon Clicked for country : "
+									+ rollOverRecord.getAttribute("nome_curso"));
+
+						}
+					});
+
+					ImgButton chartImg = new ImgButton();
+					chartImg.setShowDown(false);
+					chartImg.setShowRollOver(false);
+					chartImg.setLayoutAlign(Alignment.CENTER);
+					chartImg.setSrc("../images/delete.png");
+					chartImg.setPrompt("Remover Curso");
+					chartImg.setHeight(16);
+					chartImg.setWidth(16);
+					chartImg.addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							SC.say("Do you really want to remove this course? : "
+									+ rollOverRecord.getAttribute("nome_curso"));
+						}
+					});
+
+					rollOverCanvas.addMember(editImg);
+					rollOverCanvas.addMember(chartImg);
+				}
+				return rollOverCanvas;
+
+			}
+		};
+		periodoGrid.setShowRollOverCanvas(true);
+
+		periodoGrid.setWidth(800);
+		periodoGrid.setHeight(150);
+		periodoGrid.setDataSource(WorldXmlDS.getInstance());
+		periodoGrid.setAutoFetchData(true);
+
+		ListGridField nomeField = new ListGridField("nome_modulo", "Nome");
+		ListGridField descricaoField = new ListGridField("descricao",
+				"Descricao");
+		ListGridField ementaField = new ListGridField("numeracao", "Ementa");
+		periodoGrid.setFields(nomeField, descricaoField, ementaField);
+
+		canvas.addChild(periodoGrid);
+
+		verticalPanelBody.add(canvas);
 
 		verticalPanelPage.add(verticalPanelTitle);
 		verticalPanelPage.add(verticalPanelBody);
@@ -230,7 +251,119 @@ public class CadastroPeriodo extends Composite {
 
 		iconPanel.add(verticalPanelPage);
 
+		initSelector();
 		initWidget(iconPanel);
+
+	}
+	
+	private void popularCursos() {
+		
+		MainView.showMessage("Carregando...");
+		
+		GWTServiceCursoAsync service = GWT.create(GWTServiceCurso.class);
+		try {
+
+			service.getCursos(new AsyncCallback<List<Curso>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					System.out.println("Erro getCursos");
+				}
+
+				@Override
+				public void onSuccess(List<Curso> result) {
+
+					cursos = new Object[result.size()][2];
+
+					int count = 0;
+					for (Curso curso : result) {
+						cursos[count++] = new Object[] { curso.getIdCurso(),
+								curso.getNome() };
+					}
+
+					cursosStore = new SimpleStore(new String[] { "cid",
+							"curso" }, cursos);
+					cursosStore.load();
+					cbCurso.setStore(cursosStore);
+					
+					MainView.hideMessage();
+				}
+
+			});
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+	}
+
+	private void initSelector() {
+		
+		MainView.showMessage("Carregando...");
+		
+		getPeriodoService().getPeriodos(new AsyncCallback<List<Periodo>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				MessageBox.alert("It was not possible to load data.");
+
+			}
+
+			@Override
+			public void onSuccess(List<Periodo> result) {
+				periodoGrid.selectAllRecords();
+				periodoGrid.removeSelectedData();
+
+				for (Periodo periodo : result) {
+
+					ListGridRecord record = new ListGridRecord();
+
+					record.setAttribute("nome_modulo", periodo.getNomeModulo());
+					record.setAttribute("descricao", periodo.getDescricao());
+					record.setAttribute("numeracao", periodo.getNumeracao());
+
+					periodoGrid.addData(record);
+
+					MainView.hideMessage();
+				}
+
+			}
+
+		});
+	}
+
+	private class AdicionarPeriodoClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+
+			MainView.showMessage("Carregando...");
+			
+			Periodo periodo = new Periodo();
+
+			periodo.setIdCurso(Integer.parseInt(cbCurso.getValue()));
+			periodo.setNomeModulo(txtNome.getText());
+			periodo.setDescricao(txtDescricao.getText());
+			periodo.setNumeracao(txtNumeracao.getText());
+			periodo.setObjetivo(rtaObjetivo.getText());
+
+			getPeriodoService().AdicionarPeriodo(periodo,
+					new AsyncCallback<Boolean>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onSuccess(Boolean result) {
+							initSelector();
+							MainView.hideMessage();
+						}
+
+					});
+
+		}
 
 	}
 

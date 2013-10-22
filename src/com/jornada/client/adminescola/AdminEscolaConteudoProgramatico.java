@@ -40,7 +40,7 @@ public class AdminEscolaConteudoProgramatico extends Composite {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			mainView.openAdminEscola();
+			mainView.openCadastroConteudoProgramatico();
 			
 		}
 		

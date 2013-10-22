@@ -24,6 +24,7 @@ import com.smartgwt.client.widgets.layout.HLayout;
 public class Jornada implements EntryPoint {	
 
 	MainView mainView = new MainView();
+	private static Label lblMessage = null;
 	
 	public void onModuleLoad() {	
 	    
@@ -31,11 +32,26 @@ public class Jornada implements EntryPoint {
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		vPanel.setSize("100%", "100%");
 
+		lblMessage = new Label();
+		lblMessage.setVisible(true);
+		
+		//vPanel.add(lblMessage);
 		vPanel.add(mainView);
 		
 		RootPanel.get().add(vPanel);    
 	    
 	  }
+	
+	public static void showMessage(String message)
+	{
+		lblMessage.setText(message);
+		lblMessage.setVisible(true);
+	}
+	
+	public static void hideMessage()
+	{
+		lblMessage.setVisible(false);
+	}
 	
 }
 
